@@ -1,40 +1,39 @@
-"""
-This script uses the OpenCV Haar Cascades to detect faces. Input is taken from a connected webcam and dected faces are overlayed.
-Due to the preloaded classifier being used, only frontal face recognition is currently functional.
+# This script uses the OpenCV Haar Cascades to detect faces. Input is taken from a connected webcam and dected faces are overlayed.
+# Due to the preloaded classifier being used, only frontal face recognition is currently functional.
+#
+# http://docs.opencv.org/trunk/doc/py_tutorials/py_objdetect/py_face_detection/py_face_detection.html
+#
+# The location of faces is output to an Arduino, which uses servos to adjust webcam position in order to center the face in
+# the window.
 
-http://docs.opencv.org/trunk/doc/py_tutorials/py_objdetect/py_face_detection/py_face_detection.html
-
-The location of faces is output to an Arduino, which uses servos to adjust webcam position in order to center the face in
-the window.
-"""
 import sys #for webcam access
 import cv2 #openCV library
 import serial #allows Arduino interfacing
 import numpy
 import time #for delays
 
-"""
-Takes as parameters the xy and height width position of the detected face, finds where the middle of the window is and sends
-characters to the Arduino which direct it to:
-u: move up
-d: move down
-l: move left
-r: move right
-
-A delay is used so that the servos don't overshoot the midpoint and go into an overcompensation loop. This is also the reason
-why the midpoint is allowed to be within +- 100 pixels.
-"""
 def adjust_camera(x, y, w, h):
+    """
+    Takes as parameters the xy and height width position of the detected face, finds where the middle of the window is and sends
+    characters to the Arduino which direct it to:
+    u: move up
+    d: move down
+    l: move left
+    r: move right
+
+    A delay is used so that the servos don't overshoot the midpoint and go into an overcompensation loop. This is also the reason
+    why the midpoint is allowed to be within +- 125 pixels.
+    """
     nothing = 0
     mid_y = int(y + (h / 2.0))
     mid_x = int(x + (w / 2.0))
     
     if mid_y == half_height:
         nothing = 1
-    elif mid_y < (half_height) - 125: #if the current location of the face is more than 100 pixels away from the center
+    elif mid_y < (half_height) - 125: #if the current location of the face is more than 125 pixels away from the center
         ser.write('u')
         print 'u'
-    elif mid_y > (half_height) + 125: #if the current location of the face is more than 100 pixels away from the center
+    elif mid_y > (half_height) + 125: #if the current location of the face is more than 125 pixels away from the center
         ser.write('d')
         print 'd'
     
@@ -42,10 +41,10 @@ def adjust_camera(x, y, w, h):
     
     if mid_x == half_width:
         nothing = 1
-    elif mid_x < (half_width) - 125: #if the current location of the face is more than 100 pixels away from the center
+    elif mid_x < (half_width) - 125: #if the current location of the face is more than 125 pixels away from the center
         ser.write('l')
         print 'l'
-    elif mid_x > (half_width) + 125: #if the current location of the face is more than 100 pixels away from the center
+    elif mid_x > (half_width) + 125: #if the current location of the face is more than 125 pixels away from the center
         ser.write('r')
         print 'r'
     
