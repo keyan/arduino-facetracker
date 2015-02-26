@@ -90,7 +90,7 @@ class FaceFinder(object):
                 self.adjust_camera(x, y, w, h)
             cv2.imshow('Video', frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
-                self.end_stream()
+                #self.end_stream()
                 break
 
     def end_stream(self):
@@ -98,4 +98,5 @@ class FaceFinder(object):
         cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    FaceFinder()
+    f = FaceFinder()
+    f.loop()
